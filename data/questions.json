@@ -1,0 +1,21 @@
+
+{
+    "questions": [
+        {
+            "question": "Jakiego koloru jest czerwony maluch",
+            "answer1": { "text": "niebieski", "points": 35 },
+            "answer2": { "text": "czerwony", "points": 27 },
+            "answer3": { "text": "twoja stara", "points": 1 },
+            "answer4": { "text": "kto kierowcą kurwa jest", "points": 69 },
+            "answer5": { "text": "horonży", "points": 15 }
+        },
+        {
+            "question": "Jakiego koloru jest zielony maluch",
+            "answer1": { "text": "niebieski", "points": 35 },
+            "answer2": { "text": "czerwony", "points": 27 },
+            "answer3": { "text": "twoja stara", "points": 1 },
+            "answer4": { "text": "kto kierowcą kurwa jest", "points": 69 },
+            "answer5": { "text": "horonży", "points": 15 }
+        }
+    ]
+}
