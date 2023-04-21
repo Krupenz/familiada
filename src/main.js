@@ -13,34 +13,33 @@ let roundTracker = 0;
 const questions = generalMethods.getQuestions('data/questions.json');
 console.log(questions);
 
-const createMainWindow = () => {
+const createControllerWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  const controllerWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, 'controllerPreload.js'),
     },
   });
 
   // and load the index.html of the app.
-  console.log(path.join(__dirname, 'pages/menu/menu.html'));
-  mainWindow.loadFile(path.join(__dirname, 'pages/menu/menu.html'));
+  controllerWindow.loadFile(path.join(__dirname, 'startingPage.html'));
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  controllerWindow.webContents.openDevTools();
 
   ipcMain.handle('startGame', () => {
     // Create the browser window.
-    mainWindow.loadFile(path.join(__dirname, 'pages/controller/controller.html'));
+    controllerWindow.loadFile(path.join(__dirname, 'controller.html'));
     const gameWindow = new BrowserWindow({
       width: 800,
       height: 600,
       webPreferences: {
-        preload: path.join(__dirname, 'preload.js'),
+        preload: path.join(__dirname, 'gamePreload.js'),
       },
     })
-    gameWindow.loadFile(path.join(__dirname, 'pages/game/game.html'));
+    gameWindow.loadFile(path.join(__dirname, 'game.html'));
     gameWindow.webContents.openDevTools();
     console.log("started Game")
 
@@ -57,7 +56,7 @@ const createMainWindow = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createMainWindow);
+app.on('ready', createControllerWindow);
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -72,7 +71,7 @@ app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
-    createMainWindow();
+    createControllerWindow();
   }
 });
 
