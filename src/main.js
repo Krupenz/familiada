@@ -1,20 +1,17 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const fs = require('fs');
-const generalMethods = require('./generalMethods');
+const questions = require('../data/questions.json')
 console.log("main process");
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
-
 let roundTracker = 0;
-const questions = generalMethods.getQuestions('data/questions.json');
-console.log(questions);
+let mainWindow = 0;
+let gameWindow = 0;
 
 const createMainWindow = () => {
-  // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -22,46 +19,43 @@ const createMainWindow = () => {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
-
-  // and load the index.html of the app.
-  console.log(path.join(__dirname, 'pages/menu/menu.html'));
   mainWindow.loadFile(path.join(__dirname, 'pages/menu/menu.html'));
-
-  // Open the DevTools.
   mainWindow.webContents.openDevTools();
-
-  ipcMain.handle('startGame', () => {
-    // Create the browser window.
-    mainWindow.loadFile(path.join(__dirname, 'pages/controller/controller.html'));
-    const gameWindow = new BrowserWindow({
-      width: 800,
-      height: 600,
-      webPreferences: {
-        preload: path.join(__dirname, 'preload.js'),
-      },
-    })
-    gameWindow.loadFile(path.join(__dirname, 'pages/game/game.html'));
-    gameWindow.webContents.openDevTools();
-    console.log("started Game")
-
-    gameWindow.once('ready-to-show', () => {
-        fs.readFile('data/questions.json', (err, data) => {
-          const jsonData = JSON.parse(data);
-          console.log(jsonData)
-          gameWindow.webContents.send('getQuestion', jsonData.questions[roundTracker])
-        });
-    });
-  });
+  return mainWindow;
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createMainWindow);
+const createGameWindow = () => {
+  const gameWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+    },
+  });
+  gameWindow.loadFile(path.join(__dirname, 'pages/game/game.html'));
+  gameWindow.webContents.openDevTools();
+  return gameWindow;
+};
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
+
+ipcMain.handle('startGame', () => {
+
+  mainWindow.loadFile(path.join(__dirname, 'pages/controller/controller.html'));
+  gameWindow = createGameWindow()
+  console.log("started Game")
+  gameWindow.once('ready-to-show', () => {
+    gameWindow.webContents.send('getQuestion', questions.questions[roundTracker])
+  });
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.webContents.send('getQuestion', questions.questions[roundTracker])
+  });
+});
+
+
+app.on('ready', function() {
+  mainWindow = createMainWindow();
+});
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
@@ -72,7 +66,7 @@ app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
-    createMainWindow();
+    mainWindow = createMainWindow();
   }
 });
 
