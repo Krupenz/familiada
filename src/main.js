@@ -39,7 +39,6 @@ const createGameWindow = () => {
 
 
 ipcMain.handle('startGame', () => {
-
   mainWindow.loadFile(path.join(__dirname, 'pages/controller/controller.html'));
   gameWindow = createGameWindow()
   console.log("started Game")
@@ -50,6 +49,15 @@ ipcMain.handle('startGame', () => {
     mainWindow.webContents.send('getQuestion', questions.questions[roundTracker])
   });
 });
+
+ipcMain.handle('sendAnswer', (event, answerId) => {
+  if( answerId !== 'answerWrong') {
+    gameWindow.webContents.send('revealAnswer', answerId, questions.questions[roundTracker][answerId])
+  } else {
+    console.log('wyjebalo sie')
+  }
+})
+
 
 
 app.on('ready', function() {

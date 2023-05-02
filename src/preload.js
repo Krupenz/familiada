@@ -7,5 +7,6 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('API', {
   startGame: () => ipcRenderer.invoke('startGame'),
   getQuestion: (callback) => ipcRenderer.on('getQuestion', callback),
+  sendAnswer: (answerId) => ipcRenderer.invoke('sendAnswer', answerId),
   revealAnswer: (callback) => ipcRenderer.on('revealAnswer', callback)
 });

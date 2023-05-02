@@ -2,26 +2,24 @@ console.log("controller renderer process");
 
 var items = document.getElementsByClassName("list-group-item active");
 
-const confirmButton= document.getElementById('confirmButton');
+const confirmButton = document.getElementById('confirmButton');
 confirmButton.addEventListener('click', () => {
-    //const choosenAnswer = document.getElementsByClassName('list-group-item active');
     const element = document.querySelector('.active');
     if (element) {
-        console.log(element)
-        console.log(element.innerHTML)
+        window.API.sendAnswer(element.id);
         const errorMessageContainer = document.querySelector('.error-message');
-        errorMessageContainer.innerHTML=''
+        errorMessageContainer.textContent = ''
     }
     else {
         const errorMessageContainer = document.querySelector('.error-message');
-        errorMessageContainer.innerHTML='Wybierz odpowiedź!'
+        errorMessageContainer.textContent = 'Wybierz odpowiedź!'
     }
 });
 
 window.API.getQuestion((event, data) => {
     const questionContainer = document.querySelector('.question');
-    questionContainer.textContent= data['question'];
-    for (let answerId = 1; answerId<6; answerId++) {
+    questionContainer.textContent = data['question'];
+    for (let answerId = 1; answerId < 6; answerId++) {
         const answerContainer = document.querySelector(`#answer${answerId}`);
         const answerKey = `answer${answerId}`;
         answerContainer.textContent = data[answerKey].text;
