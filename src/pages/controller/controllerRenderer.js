@@ -53,44 +53,68 @@ confirmButton.addEventListener('click', () => {
 
 window.API.getQuestion((event, data) => {
     const questionContainer = document.getElementsByClassName('question');
+    const listGroupContainer = document.getElementsByClassName('list-group');
     questionContainer[0].textContent = data['question'];
     for (let answerId = 0; answerId < data['answers'].length; answerId++) {
-        const answerContainer = document.getElementById(`${answerId}`);
-        answerContainer.textContent = data['answers'][answerId].text;
+        listGroupContainer[0].appendChild(createAnswerRow(data, answerId))
     }
-    isFirstAnswer = true;
 });
 
-const firstAnswerHandler = (selectedAnswer, selectedTeam) => {
-    const oppositeTeam = getOppositeTeam(selectedTeam.id)
-    if ( selectedAnswer.id = '-1' ) {
-        gameHelper.textContent = `Drużyna ${selectedTeam.id} udzieliła błędnej odpowiedzi. Szansa dla drużyny ${oppositeTeam.id}`
-        globalState = 'oppositeTeamChance'
-        lockAnswerForTeam(secondaryTeam)
-    } else if ( selectedAnswer.id === '0' ) {
-        // secondaryTeam is not allowed to answer
-        gameHelper.textContent = `Drużyna ${selectedTeam.id} udzieliła najlepszej odpowiedzi. Pytanie jest przekazywane do drużyny ${selectedTeam.id}`
-        lockAnswerForTeam(selectedTeam)
-    } else {
-        //first answer was not the best one, allow other team to answer
-        firstAnswerInAnswerChallenge = selectedAnswer
-        gameHelper.textContent = `Drużyna ${selectedTeam.id} nie udzieliła najlepszej odpowiedzi. Drużyna ${secondaryTeam.id} ma szansę na lepszą odpowiedź`
-        lockAnswerForTeam(secondaryTeam)
-        globalState = 'answerChallenge'
-    }
+const createAnswerRow = (data, answerId) => {
+    const listItem = document.createElement("li");
+    listItem.classList.add("list-group-item");
+    listItem.classList.add("list-group-item-action");
+    listItem.id = `${answerId}`;
+    listItem.role = "tab"
+    listItem.setAttribute("data-toggle","list")
+
+    const spanText = document.createElement("span");
+    spanText.classList.add(`${answerId}-text`);
+    spanText.textContent = data['answers'][answerId].text;
+    listItem.appendChild(spanText);
+
+    const spanPoints = document.createElement("span");
+    spanPoints.classList.add(`${answerId}-points`);
+    spanPoints.classList.add("badge");
+    spanPoints.classList.add("badge-primary");
+    spanPoints.classList.add("badge-pill");
+    spanPoints.textContent = data['answers'][answerId].points;
+    listItem.appendChild(spanPoints);
+
+    return listItem;
 }
 
-const getOppositeTeam = (selectedTeamId) => {
-    if ( selectedTeamId === 'team1' ) {
-        return document.getElementById('team2');
-    } else {
-        return document.getElementById('team1');
-    }
-}
 
-const lockAnswerForTeam = (team) => {
-    const oppositeTeam = getOppositeTeam(team)
-    oppositeTeam.classList.remove('active');
-    oppositeTeam.classList.add('disabled');
-    team.classList.add('active');
-}
+// const firstAnswerHandler = (selectedAnswer, selectedTeam) => {
+//     const oppositeTeam = getOppositeTeam(selectedTeam.id)
+//     if ( selectedAnswer.id = '-1' ) {
+//         gameHelper.textContent = `Drużyna ${selectedTeam.id} udzieliła błędnej odpowiedzi. Szansa dla drużyny ${oppositeTeam.id}`
+//         globalState = 'oppositeTeamChance'
+//         lockAnswerForTeam(secondaryTeam)
+//     } else if ( selectedAnswer.id === '0' ) {
+//         // secondaryTeam is not allowed to answer
+//         gameHelper.textContent = `Drużyna ${selectedTeam.id} udzieliła najlepszej odpowiedzi. Pytanie jest przekazywane do drużyny ${selectedTeam.id}`
+//         lockAnswerForTeam(selectedTeam)
+//     } else {
+//         //first answer was not the best one, allow other team to answer
+//         firstAnswerInAnswerChallenge = selectedAnswer
+//         gameHelper.textContent = `Drużyna ${selectedTeam.id} nie udzieliła najlepszej odpowiedzi. Drużyna ${secondaryTeam.id} ma szansę na lepszą odpowiedź`
+//         lockAnswerForTeam(secondaryTeam)
+//         globalState = 'answerChallenge'
+//     }
+// }
+
+// const getOppositeTeam = (selectedTeamId) => {
+//     if ( selectedTeamId === 'team1' ) {
+//         return document.getElementById('team2');
+//     } else {
+//         return document.getElementById('team1');
+//     }
+// }
+
+// const lockAnswerForTeam = (team) => {
+//     const oppositeTeam = getOppositeTeam(team)
+//     oppositeTeam.classList.remove('active');
+//     oppositeTeam.classList.add('disabled');
+//     team.classList.add('active');
+// }
