@@ -7,9 +7,10 @@ console.log("main process");
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
+
 let roundTracker = 0;
-let mainWindow = 0;
-let gameWindow = 0;
+let mainWindow;
+let gameWindow;
 
 const createMainWindow = () => {
   const mainWindow = new BrowserWindow({
@@ -37,7 +38,6 @@ const createGameWindow = () => {
   return gameWindow;
 };
 
-
 ipcMain.handle('startGame', () => {
   mainWindow.loadFile(path.join(__dirname, 'pages/controller/controller.html'));
   gameWindow = createGameWindow()
@@ -50,15 +50,13 @@ ipcMain.handle('startGame', () => {
   });
 });
 
-ipcMain.handle('sendAnswer', (event, answerId) => {
-  if( answerId !== 'answerWrong') {
-    gameWindow.webContents.send('revealAnswer', answerId, questions.questions[roundTracker][answerId])
+ipcMain.handle('sendAnswer', (event, answerId, teamId) => {
+  if( answerId !== '-1' ) {
+    gameWindow.webContents.send('revealAnswer', answerId, questions.questions[roundTracker]['answers'][answerId])
   } else {
-    console.log('wyjebalo sie')
+    gameWindow.webContents.send('wrongAnswer', teamId)
   }
 })
-
-
 
 app.on('ready', function() {
   mainWindow = createMainWindow();
@@ -77,6 +75,3 @@ app.on('activate', () => {
     mainWindow = createMainWindow();
   }
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
