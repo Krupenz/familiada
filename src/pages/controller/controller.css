@@ -40,24 +40,6 @@
     flex-direction: column;
   }
 
-  /* .row {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  font-size: 280%;
-  } */
-
-  /* .answer {
-    flex-grow: 3;
-    align-self: flex-start;
-    } */
-
-  /* .right-column {
-    width: 11%;
-    height: 100%;
-    padding: 0;
-  } */
-
   .team1-crosses,
   .team2-crosses {
     display: flex;
@@ -78,4 +60,9 @@
 
   .col4 {
     width:100%
+  }
+
+  #answer-list {
+    display: flex;
+    flex-direction: column;
   }

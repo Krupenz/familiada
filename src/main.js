@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+// const localShortcut = require('electron-localshortcut');
 const questions = require('../data/questions.json')
 console.log("main process");
 
