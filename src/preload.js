@@ -8,5 +8,6 @@ contextBridge.exposeInMainWorld('API', {
   startGame: () => ipcRenderer.invoke('startGame'),
   getQuestion: (callback) => ipcRenderer.on('getQuestion', callback),
   sendAnswer: (answerId) => ipcRenderer.invoke('sendAnswer', answerId),
-  revealAnswer: (callback) => ipcRenderer.on('revealAnswer', callback)
+  revealAnswer: (callback) => ipcRenderer.on('revealAnswer', callback),
+  sendFail: (buttonId) => ipcRenderer.invoke('sendFail', buttonId)
 });

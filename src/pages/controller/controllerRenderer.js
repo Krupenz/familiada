@@ -15,6 +15,25 @@ window.API.getQuestion((event, data) => {
     }
 });
 
+const firstFailTeamOneButton = document.getElementById("team1-cross-1");
+const secondFailTeamOneButton = document.getElementById("team1-cross-2");
+const thirdFailTeamOneButton = document.getElementById("team1-cross-3");
+const firstFailTeamTwoButton = document.getElementById("team2-cross-1");
+const secondFailTeamTwoButton = document.getElementById("team2-cross-2");
+const thirdFailTeamTwoButton = document.getElementById("team2-cross-3");
+
+firstFailTeamOneButton.addEventListener('click', handleClick(firstFailTeamOneButton.id))
+secondFailTeamOneButton.addEventListener('click', handleClick(secondFailTeamOneButton.id))
+thirdFailTeamOneButton.addEventListener('click', handleClick(thirdFailTeamOneButton.id))
+firstFailTeamTwoButton.addEventListener('click', handleClick(firstFailTeamTwoButton.id))
+secondFailTeamTwoButton.addEventListener('click', handleClick(secondFailTeamTwoButton.id))
+thirdFailTeamTwoButton.addEventListener('click', handleClick(thirdFailTeamTwoButton.id))
+
+
+const handleClick = (buttonId) => {
+    window.API.sendFail(buttonId);
+}
+
 const createAnswerButton = (data, answerId) => {
     const listItem = document.createElement("button");
     listItem.classList.add("btn");
