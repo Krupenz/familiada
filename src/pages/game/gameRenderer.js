@@ -3,7 +3,7 @@ const API = window.API;
 
 window.API.getQuestion((event, data) => {
     console.log(data);
-    const centerColumn = document.getElementsByClassName(`center-column`);
+    const centerColumn = document.getElementById(`center-column`);
     for (let answerId = 0; answerId < data['answers'].length; answerId++) {
         const newRow = createAnswerRow(answerId)
         console.log(newRow)
