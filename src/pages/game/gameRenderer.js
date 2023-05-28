@@ -8,8 +8,9 @@ window.API.getQuestion((event, data) => {
         const newRow = createAnswerRow(answerId)
         console.log(newRow)
         console.log(centerColumn)
-        centerColumn[0].appendChild(newRow)
+        centerColumn.appendChild(newRow)
     }
+    centerColumn.appendChild(createPointsBank())
 });
 
 window.API.revealAnswer((event, answerId, answer) => {
@@ -19,6 +20,17 @@ window.API.revealAnswer((event, answerId, answer) => {
     answerTextContainer[0].textContent = answer.text
     answerScoreContainer[0].textContent = answer.points
 });
+
+window.API.revealFail((event, buttonId) => {
+    const crossContainer = document.getElementById(buttonId);
+    crossContainer.textContent = 'X';
+})
+
+window.API.updatePointsSum((event, pointsSum) => {
+    console.log(pointsSum)
+    const pointsSumContainer = document.getElementById('pointsSumValue');
+    pointsSumContainer.textContent = pointsSum;
+})
 
 
 const createAnswerRow = (answerId) => {
@@ -38,8 +50,24 @@ const createAnswerRow = (answerId) => {
 
     const scoreDiv = document.createElement("div");
     scoreDiv.classList.add("answer-score");
-    scoreDiv.innerText = "--";
+    scoreDiv.innerText = "- -";
     rowDiv.appendChild(scoreDiv);
 
     return rowDiv;
+}
+
+const createPointsBank = () => {
+    const bankContainer = document.createElement("div");
+    bankContainer.id = `bank`;
+
+    const textSum = document.createElement("span");
+    textSum.innerText = `SUMA`;
+    bankContainer.appendChild(textSum);
+
+    const points = document.createElement("span");
+    points.id = 'pointsSumValue'
+    points.innerText = ``;
+    bankContainer.appendChild(points);
+
+    return bankContainer;
 }

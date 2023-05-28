@@ -51,12 +51,13 @@ ipcMain.handle('startGame', () => {
   });
 });
 
-ipcMain.handle('sendAnswer', (event, answerId, teamId) => {
-  if( answerId !== '-1' ) {
+ipcMain.handle('sendAnswer', (event, answerId, pointsSum) => {
     gameWindow.webContents.send('revealAnswer', answerId, questions.questions[roundTracker]['answers'][answerId])
-  } else {
-    gameWindow.webContents.send('wrongAnswer', teamId)
-  }
+    gameWindow.webContents.send('updatePointsSum', pointsSum);
+})
+
+ipcMain.handle('sendFail', (event, buttonId) => {
+  gameWindow.webContents.send('revealFail', buttonId)
 })
 
 app.on('ready', function() {
